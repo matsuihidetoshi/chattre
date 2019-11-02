@@ -85,6 +85,7 @@ export default {
   width: 50%;
 }
 .form {
+  font-size: 16px;
   height: 8em;
   width: 30em;
   border-radius: 0.5em;
