@@ -29,19 +29,17 @@ export default {
     }
   },
   mounted: async function () {
-    let chats = await API.graphql(graphqlOperation(listChats));
-    console.log(chats);
+    let chats = await API.graphql(graphqlOperation(listChats))
     this.chats = _.orderBy(chats.data.listChats.items, ['updatedAt'], ['desc']).slice(0, 50)
     
     API.graphql(
       graphqlOperation(onCreateChat)
     ).subscribe({
       next: (eventData) => {
-        console.log('eventData: ', eventData);
-        const chat = eventData.value.data.onCreateChat;
+        const chat = eventData.value.data.onCreateChat
         const chats = [...this.chats.filter(content => {
-          return (content.description !== chat.description);
-        }), chat];
+          return (content.description !== chat.description)
+        }), chat]
         this.chats = _.orderBy(chats, ['updatedAt'], ['desc']).slice(0, 50)
       }
     })
@@ -53,12 +51,11 @@ export default {
       try {
         const chats = [...this.chats, chat]
         this.chats = chats
-        this.name = "name";
-        this.description = "";
+        this.name = "name"
+        this.description = ""
         await API.graphql(graphqlOperation(createChat, {input: chat}))
-        console.log('success')
       } catch (error) {
-        console.log('error: ', error)
+        error
       }
     }
   }
