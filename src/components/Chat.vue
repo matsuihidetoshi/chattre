@@ -1,0 +1,121 @@
+<template>
+  <div class="cities">
+    <div id="chat-field">
+      <div v-for="(chat, id) in chats" v-bind:key="id">
+        <strong>{{ chat.name }}</strong><br/>{{ chat.description }}
+      </div>
+    </div>
+    <div id="chat-form">
+      <textarea v-model="description" name="description" class="form"/><br/>
+      <button v-on:click="createChat()">Post{{ name }}</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import { API, graphqlOperation} from "aws-amplify"
+import { listChats } from "../graphql/queries"
+import { createChat } from "../graphql/mutations"
+import { onCreateChat } from "../graphql/subscriptions"
+import _ from 'lodash'
+
+export default {
+  name: 'Chat',
+  data () {
+    return {
+      chats: [],
+      name: "name",
+      description: ""
+    }
+  },
+  mounted: async function () {
+    let chats = await API.graphql(graphqlOperation(listChats));
+    console.log(chats);
+    this.chats = _.orderBy(chats.data.listChats.items, ['updatedAt'], ['desc']).slice(0, 50)
+    
+    API.graphql(
+      graphqlOperation(onCreateChat)
+    ).subscribe({
+      next: (eventData) => {
+        console.log('eventData: ', eventData);
+        const chat = eventData.value.data.onCreateChat;
+        const chats = [...this.chats.filter(content => {
+          return (content.description !== chat.description);
+        }), chat];
+        this.chats = _.orderBy(chats, ['updatedAt'], ['desc']).slice(0, 50)
+      }
+    })
+  },
+  methods: {
+    createChat: async function () {
+      if ((this.name === "") || (this.description === "")) return 
+      const chat = {name: this.name, description: this.description}
+      try {
+        const chats = [...this.chats, chat]
+        this.chats = chats
+        this.name = "name";
+        this.description = "";
+        await API.graphql(graphqlOperation(createChat, {input: chat}))
+        console.log('success')
+      } catch (error) {
+        console.log('error: ', error)
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+#chat-field {
+  height: 50em;
+  display: inline-block;
+  text-align: center;
+  max-width: 30em;
+  overflow: scroll;
+}
+#chat-field > div {
+  display: block;
+  padding: 0.5em;
+  margin: 0.5em;
+  background-color: #d1d8e6;
+  border-radius: 1em;
+  overflow-wrap: break-word;
+}
+#chat-form {
+  position: fixed;
+  top: 68%;
+  left: 25%;
+  width: 50%;
+}
+.form {
+  height: 8em;
+  width: 30em;
+  border-radius: 0.5em;
+  border-color: darkgray;
+  opacity: 0.7;
+}
+button {
+  height: 3em;
+  margin-top: 5px;
+  width: 30.6em;
+  border-radius: 0.5em;
+  background-color: rgb(83, 216, 209);
+  font-weight: bold;
+}
+@media screen and (max-width: 415px) {
+  #chat-field {
+    height: 450px;
+  }
+  #chat-form {
+    left: 9.5%;
+  }
+}
+@media screen and (max-width: 376px) {
+  #chat-field {
+    height: 380px;
+  }
+  #chat-form {
+    left: 5%;
+  }
+}
+</style>
