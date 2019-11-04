@@ -1,5 +1,6 @@
 <template>
-  <div class="cities">
+  <div class="chats">
+    {{test}}
     <div id="chat-field">
       <div v-for="(chat, id) in chats" v-bind:key="id">
         <strong>{{ chat.name }}</strong><br/>{{ chat.description }}
@@ -23,24 +24,26 @@ export default {
   name: 'Chat',
   data () {
     return {
+      test: null,
       chats: [],
       name: "name",
       description: ""
     }
   },
   mounted: async function () {
-    let chats = await API.graphql(graphqlOperation(listChats))
-    this.chats = _.orderBy(chats.data.listChats.items, ['updatedAt'], ['desc']).slice(0, 50)
+    let chats = await API.graphql(graphqlOperation(
+      listChats, {limit: 99999}))
+    this.chats = _.orderBy(chats.data.listChats.items, 'updatedAt', 'desc').slice(0, 100)
     
     API.graphql(
-      graphqlOperation(onCreateChat)
+      graphqlOperation(onCreateChat, {limit: 99999})
     ).subscribe({
       next: (eventData) => {
         const chat = eventData.value.data.onCreateChat
         const chats = [...this.chats.filter(content => {
           return (content.description !== chat.description)
         }), chat]
-        this.chats = _.orderBy(chats, ['updatedAt'], ['desc']).slice(0, 50)
+        this.chats = _.orderBy(chats, 'updatedAt', 'desc').slice(0, 100)
       }
     })
   },
@@ -64,7 +67,7 @@ export default {
 
 <style scoped>
 #chat-field {
-  height: 50em;
+  height: 450px;
   display: inline-block;
   text-align: center;
   max-width: 30em;
@@ -100,12 +103,20 @@ button {
   background-color: rgb(83, 216, 209);
   font-weight: bold;
 }
+@media screen and (max-width: 769px) {
+  .form {
+    width: 21em;
+  }
+}
 @media screen and (max-width: 415px) {
   #chat-field {
     height: 450px;
   }
   #chat-form {
     left: 9.5%;
+  }
+  .form {
+    width: 21em;
   }
 }
 @media screen and (max-width: 376px) {
