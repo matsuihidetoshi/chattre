@@ -8,7 +8,7 @@
     </div>
     <div id="chat-form">
       <textarea v-model="description" name="description" class="form"/><br/>
-      <button v-on:click="createChat()">Post{{ name }}</button>
+      <button v-on:click="createChat()">Post</button>
     </div>
   </div>
 </template>
@@ -66,11 +66,15 @@ export default {
 </script>
 
 <style scoped>
+html {
+  margin: 0;
+  padding: 0;
+}
 #chat-field {
-  height: 450px;
+  height: 380px;
   display: inline-block;
   text-align: center;
-  max-width: 30em;
+  max-width: 20em;
   overflow: scroll;
 }
 #chat-field > div {
@@ -81,28 +85,25 @@ export default {
   border-radius: 1em;
   overflow-wrap: break-word;
 }
-#chat-form {
-  position: fixed;
-  top: 68%;
-  left: 25%;
-  width: 50%;
-}
-.form {
+textarea {
+  width: 98%;
+  max-width: 30em;
   font-size: 16px;
   height: 8em;
-  width: 30em;
   border-radius: 0.5em;
   border-color: darkgray;
   opacity: 0.7;
 }
 button {
+  width: 98%;
+  max-width: 30em;
   height: 3em;
   margin-top: 5px;
-  width: 30.6em;
   border-radius: 0.5em;
   background-color: rgb(83, 216, 209);
   font-weight: bold;
 }
+/*
 @media screen and (max-width: 769px) {
   .form {
     width: 21em;
@@ -129,5 +130,5 @@ button {
   .form {
     width: 20.6em;
   }
-}
+}*/
 </style>
