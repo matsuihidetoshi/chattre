@@ -126,5 +126,8 @@ button {
   #chat-form {
     left: 5%;
   }
+  .form {
+    width: 20.6em;
+  }
 }
 </style>
