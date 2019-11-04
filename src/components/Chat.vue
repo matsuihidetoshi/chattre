@@ -7,7 +7,8 @@
       </div>
     </div>
     <div id="chat-form">
-      <textarea v-model="description" name="description" class="form"/><br/>
+      <input v-model="name" name="name" class="form" placeholder="Name"><br/>
+      <textarea v-model="description" name="description" class="form" placeholder="Chat"/><br/>
       <button v-on:click="createChat()">Post</button>
     </div>
   </div>
@@ -26,7 +27,7 @@ export default {
     return {
       test: null,
       chats: [],
-      name: "name",
+      name: "",
       description: ""
     }
   },
@@ -54,7 +55,7 @@ export default {
       try {
         const chats = [...this.chats, chat]
         this.chats = chats
-        this.name = "name"
+        this.name = ""
         this.description = ""
         await API.graphql(graphqlOperation(createChat, {input: chat}))
       } catch (error) {
@@ -84,15 +85,22 @@ html {
   background-color: #d1d8e6;
   border-radius: 1em;
   overflow-wrap: break-word;
+  white-space: pre-line;
 }
-textarea {
+.form {
   width: 98%;
   max-width: 30em;
-  font-size: 16px;
-  height: 8em;
+  font-size: 18px;
   border-radius: 0.5em;
-  border-color: darkgray;
+  border: darkgray 1px solid;
   opacity: 0.7;
+}
+input {
+  height: 2em;
+}
+textarea {
+  margin-top: 5px;
+  height: 5em;
 }
 button {
   width: 98%;
@@ -103,32 +111,4 @@ button {
   background-color: rgb(83, 216, 209);
   font-weight: bold;
 }
-/*
-@media screen and (max-width: 769px) {
-  .form {
-    width: 21em;
-  }
-}
-@media screen and (max-width: 415px) {
-  #chat-field {
-    height: 450px;
-  }
-  #chat-form {
-    left: 9.5%;
-  }
-  .form {
-    width: 21em;
-  }
-}
-@media screen and (max-width: 376px) {
-  #chat-field {
-    height: 380px;
-  }
-  #chat-form {
-    left: 5%;
-  }
-  .form {
-    width: 20.6em;
-  }
-}*/
 </style>
