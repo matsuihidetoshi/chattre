@@ -55,7 +55,6 @@ export default {
       try {
         const chats = [...this.chats, chat]
         this.chats = chats
-        this.name = ""
         this.description = ""
         await API.graphql(graphqlOperation(createChat, {input: chat}))
       } catch (error) {
@@ -88,7 +87,7 @@ html {
   white-space: pre-line;
 }
 .form {
-  width: 98%;
+  width: 84%;
   max-width: 30em;
   font-size: 18px;
   border-radius: 0.5em;
@@ -103,7 +102,7 @@ textarea {
   height: 5em;
 }
 button {
-  width: 98%;
+  width: 86%;
   max-width: 30em;
   height: 3em;
   margin-top: 5px;
