@@ -1,9 +1,10 @@
 <template>
   <div class="chats">
-    {{test}}
     <div id="chat-field">
       <div v-for="(chat, id) in chats" v-bind:key="id">
-        <strong>{{ chat.name }}</strong><br/>{{ chat.description }}
+        <strong class="title">{{ chat.title }}</strong><br/>
+        <strong>{{ chat.name }}</strong><br/>
+        {{ chat.description }}
       </div>
     </div>
     <div id="chat-form">
@@ -16,7 +17,7 @@
 
 <script>
 import { API, graphqlOperation} from "aws-amplify"
-import { listChats } from "../graphql/queries"
+import { listChats, listAdjectives, listNouns } from "../graphql/queries"
 import { createChat } from "../graphql/mutations"
 import { onCreateChat } from "../graphql/subscriptions"
 import _ from 'lodash'
@@ -25,16 +26,28 @@ export default {
   name: 'Chat',
   data () {
     return {
-      test: null,
       chats: [],
       name: "",
-      description: ""
+      description: "",
+      adjectives: [],
+      nouns: []
     }
   },
   mounted: async function () {
     let chats = await API.graphql(graphqlOperation(
-      listChats, {limit: 99999}))
+      listChats, {limit: 99999}
+    ))
     this.chats = _.orderBy(chats.data.listChats.items, 'updatedAt', 'desc').slice(0, 100)
+    
+    let adjectives = await API.graphql(graphqlOperation(
+      listAdjectives, {limit: 99999}
+    ))
+    this.adjectives = adjectives.data.listAdjectives.items
+
+    let nouns = await API.graphql(graphqlOperation(
+      listNouns, {limit: 99999}
+    ))
+    this.nouns = nouns.data.listNouns.items
     
     API.graphql(
       graphqlOperation(onCreateChat, {limit: 99999})
@@ -51,7 +64,8 @@ export default {
   methods: {
     createChat: async function () {
       if ((this.name === "") || (this.description === "")) return 
-      const chat = {name: this.name, description: this.description}
+      let title = this.adjectives[Math.floor(Math.random() * this.adjectives.length)].name + this.nouns[Math.floor(Math.random() * this.nouns.length)].name
+      const chat = {name: this.name, description: this.description, title: title}
       try {
         const chats = [...this.chats, chat]
         this.chats = chats
@@ -85,6 +99,9 @@ html {
   border-radius: 1em;
   overflow-wrap: break-word;
   white-space: pre-line;
+}
+.title {
+  font-size: 3px;
 }
 .form {
   width: 84%;

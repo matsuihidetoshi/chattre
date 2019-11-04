@@ -6,6 +6,7 @@ export const createChat = `mutation CreateChat($input: CreateChatInput!) {
     id
     name
     description
+    title
     updatedAt
   }
 }
@@ -15,6 +16,7 @@ export const updateChat = `mutation UpdateChat($input: UpdateChatInput!) {
     id
     name
     description
+    title
     updatedAt
   }
 }
@@ -24,7 +26,50 @@ export const deleteChat = `mutation DeleteChat($input: DeleteChatInput!) {
     id
     name
     description
+    title
     updatedAt
+  }
+}
+`;
+export const createAdjective = `mutation CreateAdjective($input: CreateAdjectiveInput!) {
+  createAdjective(input: $input) {
+    id
+    name
+  }
+}
+`;
+export const updateAdjective = `mutation UpdateAdjective($input: UpdateAdjectiveInput!) {
+  updateAdjective(input: $input) {
+    id
+    name
+  }
+}
+`;
+export const deleteAdjective = `mutation DeleteAdjective($input: DeleteAdjectiveInput!) {
+  deleteAdjective(input: $input) {
+    id
+    name
+  }
+}
+`;
+export const createNoun = `mutation CreateNoun($input: CreateNounInput!) {
+  createNoun(input: $input) {
+    id
+    name
+  }
+}
+`;
+export const updateNoun = `mutation UpdateNoun($input: UpdateNounInput!) {
+  updateNoun(input: $input) {
+    id
+    name
+  }
+}
+`;
+export const deleteNoun = `mutation DeleteNoun($input: DeleteNounInput!) {
+  deleteNoun(input: $input) {
+    id
+    name
   }
 }
 `;

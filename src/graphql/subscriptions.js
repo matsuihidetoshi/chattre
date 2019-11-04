@@ -6,6 +6,7 @@ export const onCreateChat = `subscription OnCreateChat {
     id
     name
     description
+    title
     updatedAt
   }
 }
@@ -15,6 +16,7 @@ export const onUpdateChat = `subscription OnUpdateChat {
     id
     name
     description
+    title
     updatedAt
   }
 }
@@ -24,7 +26,50 @@ export const onDeleteChat = `subscription OnDeleteChat {
     id
     name
     description
+    title
     updatedAt
+  }
+}
+`;
+export const onCreateAdjective = `subscription OnCreateAdjective {
+  onCreateAdjective {
+    id
+    name
+  }
+}
+`;
+export const onUpdateAdjective = `subscription OnUpdateAdjective {
+  onUpdateAdjective {
+    id
+    name
+  }
+}
+`;
+export const onDeleteAdjective = `subscription OnDeleteAdjective {
+  onDeleteAdjective {
+    id
+    name
+  }
+}
+`;
+export const onCreateNoun = `subscription OnCreateNoun {
+  onCreateNoun {
+    id
+    name
+  }
+}
+`;
+export const onUpdateNoun = `subscription OnUpdateNoun {
+  onUpdateNoun {
+    id
+    name
+  }
+}
+`;
+export const onDeleteNoun = `subscription OnDeleteNoun {
+  onDeleteNoun {
+    id
+    name
   }
 }
 `;

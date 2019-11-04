@@ -2,5 +2,14 @@ type Chat @model {
   id: ID!
   name: String!
   description: String
+  title: String
   updatedAt: String
+}
+type Adjective @model {
+  id: ID!
+  name: String!
+}
+type Noun @model {
+  id: ID!
+  name: String!
 }
