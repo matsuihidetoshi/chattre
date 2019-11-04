@@ -101,7 +101,7 @@ html {
   white-space: pre-line;
 }
 .title {
-  font-size: 3px;
+  font-size: 10px;
 }
 .form {
   width: 84%;
