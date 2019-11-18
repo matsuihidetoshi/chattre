@@ -35,7 +35,7 @@
     <div id="chat-form">
       <input v-model="name" name="name" class="form" placeholder="Name"><br/>
       <textarea v-model="description" name="description" class="form" placeholder="Chat"/><br/>
-      <button v-on:click="createChat()">Post</button>
+      <button v-on:click="detectSentiment()">Post</button>
     </div>
   </div>
 </template>
@@ -57,7 +57,7 @@ export default {
       description: "",
       adjectives: [],
       nouns: [],
-      sentiment: 'NEUTRAL'
+      sentiment: ""
     }
   },
   mounted: async function () {
@@ -89,15 +89,19 @@ export default {
     })
   },
   methods: {
-    createChat: async function () {
-      if ((this.name === "") || (this.description === "")) return
+    detectSentiment: function(){
+      if (this.description === "") return
       axios.get('https://bruykc47al.execute-api.ap-northeast-1.amazonaws.com/default/DetectSentiment', {
         params: {
           text: this.description
         }
       }).then(response => {
         this.sentiment = response.data.body.Sentiment
+        this.createChat()
       })
+    },
+    createChat: async function () {
+      if ((this.name === "") || (this.description === "")) return
       let title = this.adjectives[Math.floor(Math.random() * this.adjectives.length)].name + this.nouns[Math.floor(Math.random() * this.nouns.length)].name
       const chat = {name: this.name, description: this.description, title: title, sentiment: this.sentiment}
       try {
