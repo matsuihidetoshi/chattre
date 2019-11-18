@@ -7,6 +7,7 @@ export const onCreateChat = `subscription OnCreateChat {
     name
     description
     title
+    sentiment
     updatedAt
   }
 }
@@ -17,6 +18,7 @@ export const onUpdateChat = `subscription OnUpdateChat {
     name
     description
     title
+    sentiment
     updatedAt
   }
 }
@@ -27,6 +29,7 @@ export const onDeleteChat = `subscription OnDeleteChat {
     name
     description
     title
+    sentiment
     updatedAt
   }
 }

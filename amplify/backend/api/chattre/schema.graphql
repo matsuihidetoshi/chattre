@@ -3,6 +3,7 @@ type Chat @model {
   name: String!
   description: String
   title: String
+  sentiment: String
   updatedAt: String
 }
 type Adjective @model {

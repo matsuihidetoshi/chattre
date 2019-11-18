@@ -7,6 +7,7 @@ export const createChat = `mutation CreateChat($input: CreateChatInput!) {
     name
     description
     title
+    sentiment
     updatedAt
   }
 }
@@ -17,6 +18,7 @@ export const updateChat = `mutation UpdateChat($input: UpdateChatInput!) {
     name
     description
     title
+    sentiment
     updatedAt
   }
 }
@@ -27,6 +29,7 @@ export const deleteChat = `mutation DeleteChat($input: DeleteChatInput!) {
     name
     description
     title
+    sentiment
     updatedAt
   }
 }

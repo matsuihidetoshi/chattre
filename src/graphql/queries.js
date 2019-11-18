@@ -7,6 +7,7 @@ export const getChat = `query GetChat($id: ID!) {
     name
     description
     title
+    sentiment
     updatedAt
   }
 }
@@ -22,6 +23,7 @@ export const listChats = `query ListChats(
       name
       description
       title
+      sentiment
       updatedAt
     }
     nextToken

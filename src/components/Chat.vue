@@ -1,11 +1,35 @@
 <template>
   <div class="chats">
-    {{ sentiment }}
     <div id="chat-field">
       <div v-for="(chat, id) in chats" v-bind:key="id">
-        <strong class="title">{{ chat.title }}</strong><br/>
-        <strong>{{ chat.name }}</strong><br/>
-        {{ chat.description }}
+        <div v-if="chat.sentiment === 'POSITIVE'">
+          <div class="positive">
+            <strong class="title">{{ chat.title }}</strong><br/>
+            <strong>{{ chat.name }}</strong><br/>
+            {{ chat.description }}
+          </div>
+        </div>
+        <div v-else-if="chat.sentiment === 'NEGATIVE'">
+          <div class="negative">
+            <strong class="title">{{ chat.title }}</strong><br/>
+            <strong>{{ chat.name }}</strong><br/>
+            {{ chat.description }}
+          </div>
+        </div>
+        <div v-else-if="chat.sentiment === 'MIXED'">
+          <div class="mixed">
+            <strong class="title">{{ chat.title }}</strong><br/>
+            <strong>{{ chat.name }}</strong><br/>
+            {{ chat.description }}
+          </div>
+        </div>
+        <div v-else>
+          <div class="neutral">
+            <strong class="title">{{ chat.title }}</strong><br/>
+            <strong>{{ chat.name }}</strong><br/>
+            {{ chat.description }}
+          </div>
+        </div>
       </div>
     </div>
     <div id="chat-form">
@@ -33,7 +57,7 @@ export default {
       description: "",
       adjectives: [],
       nouns: [],
-      sentiment: ""
+      sentiment: 'NEUTRAL'
     }
   },
   mounted: async function () {
@@ -75,7 +99,7 @@ export default {
         this.sentiment = response.data.body.Sentiment
       })
       let title = this.adjectives[Math.floor(Math.random() * this.adjectives.length)].name + this.nouns[Math.floor(Math.random() * this.nouns.length)].name
-      const chat = {name: this.name, description: this.description, title: title}
+      const chat = {name: this.name, description: this.description, title: title, sentiment: this.sentiment}
       try {
         const chats = [...this.chats, chat]
         this.chats = chats
@@ -101,14 +125,25 @@ html {
   max-width: 20em;
   overflow: scroll;
 }
-#chat-field > div {
+#chat-field > div > div > div {
   display: block;
   padding: 0.5em;
   margin: 0.5em;
-  background-color: #d1d8e6;
   border-radius: 1em;
   overflow-wrap: break-word;
   white-space: pre-line;
+}
+.positive {
+  background-color: #72ece6;
+}
+.negative {
+  background-color: #ff8d9c;
+}
+.mixed {
+  background-color: #f5faae;
+}
+.neutral {
+  background-color: #d1d8e6;
 }
 .title {
   font-size: 10px;
@@ -134,7 +169,7 @@ button {
   height: 3em;
   margin-top: 5px;
   border-radius: 0.5em;
-  background-color: rgb(83, 216, 209);
+  background-color: #72ece6;
   font-weight: bold;
 }
 </style>
