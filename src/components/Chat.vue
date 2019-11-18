@@ -1,5 +1,6 @@
 <template>
   <div class="chats">
+    {{ sentiment }}
     <div id="chat-field">
       <div v-for="(chat, id) in chats" v-bind:key="id">
         <strong class="title">{{ chat.title }}</strong><br/>
@@ -21,6 +22,7 @@ import { listChats, listAdjectives, listNouns } from "../graphql/queries"
 import { createChat } from "../graphql/mutations"
 import { onCreateChat } from "../graphql/subscriptions"
 import _ from 'lodash'
+import axios from 'axios'
 
 export default {
   name: 'Chat',
@@ -30,7 +32,8 @@ export default {
       name: "",
       description: "",
       adjectives: [],
-      nouns: []
+      nouns: [],
+      sentiment: ""
     }
   },
   mounted: async function () {
@@ -63,7 +66,14 @@ export default {
   },
   methods: {
     createChat: async function () {
-      if ((this.name === "") || (this.description === "")) return 
+      if ((this.name === "") || (this.description === "")) return
+      axios.get('https://bruykc47al.execute-api.ap-northeast-1.amazonaws.com/default/DetectSentiment', {
+        params: {
+          text: this.description
+        }
+      }).then(response => {
+        this.sentiment = response.data.body.Sentiment
+      })
       let title = this.adjectives[Math.floor(Math.random() * this.adjectives.length)].name + this.nouns[Math.floor(Math.random() * this.nouns.length)].name
       const chat = {name: this.name, description: this.description, title: title}
       try {
