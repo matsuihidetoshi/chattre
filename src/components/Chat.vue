@@ -36,6 +36,7 @@
       <input v-model="name" name="name" class="form" placeholder="Name"><br/>
       <textarea v-model="description" name="description" class="form" placeholder="Chat"/><br/>
       <button v-on:click="detectSentiment()">Post</button>
+      <button v-on:click="reloadChats()" class="reload"><i class="fas fa-redo-alt"></i></button>
     </div>
   </div>
 </template>
@@ -60,40 +61,15 @@ export default {
       sentiment: ""
     }
   },
-  mounted: async function () {
-    let chats = await API.graphql(graphqlOperation(
-      listChats, {limit: 99999}
-    ))
-    this.chats = _.orderBy(chats.data.listChats.items, 'updatedAt', 'desc').slice(0, 100)
-    
-    let adjectives = await API.graphql(graphqlOperation(
-      listAdjectives, {limit: 99999}
-    ))
-    this.adjectives = adjectives.data.listAdjectives.items
-
-    let nouns = await API.graphql(graphqlOperation(
-      listNouns, {limit: 99999}
-    ))
-    this.nouns = nouns.data.listNouns.items
-    
-    API.graphql(
-      graphqlOperation(onCreateChat, {limit: 99999})
-    ).subscribe({
-      next: (eventData) => {
-        const chat = eventData.value.data.onCreateChat
-        const chats = [...this.chats.filter(content => {
-          return (content.description !== chat.description)
-        }), chat]
-        this.chats = _.orderBy(chats, 'updatedAt', 'desc').slice(0, 100)
-      }
-    })
+  mounted: function () {
+    this.displayChats()
   },
   methods: {
     detectSentiment: function(){
       if (this.description === "") return
       axios.get('https://bruykc47al.execute-api.ap-northeast-1.amazonaws.com/default/DetectSentiment', {
         params: {
-          text: this.description
+          text: this.description.replace(/\r?\n/g, '')
         }
       }).then(response => {
         this.sentiment = response.data.body.Sentiment
@@ -112,6 +88,37 @@ export default {
       } catch (error) {
         error
       }
+    },
+    reloadChats: function () {
+      this.displayChats()
+    },
+    displayChats: async function () {
+      let chats = await API.graphql(graphqlOperation(
+        listChats, {limit: 99999}
+      ))
+      this.chats = _.orderBy(chats.data.listChats.items, 'updatedAt', 'desc').slice(0, 100)
+      
+      let adjectives = await API.graphql(graphqlOperation(
+        listAdjectives, {limit: 99999}
+      ))
+      this.adjectives = adjectives.data.listAdjectives.items
+
+      let nouns = await API.graphql(graphqlOperation(
+        listNouns, {limit: 99999}
+      ))
+      this.nouns = nouns.data.listNouns.items
+      
+      API.graphql(
+        graphqlOperation(onCreateChat, {limit: 99999})
+      ).subscribe({
+        next: (eventData) => {
+          const chat = eventData.value.data.onCreateChat
+          const chats = [...this.chats.filter(content => {
+            return (content.description !== chat.description)
+          }), chat]
+          this.chats = _.orderBy(chats, 'updatedAt', 'desc').slice(0, 100)
+        }
+      })
     }
   }
 }
@@ -160,6 +167,11 @@ html {
   border: darkgray 1px solid;
   opacity: 0.7;
 }
+.reload {
+  width: 15%;
+  margin-left: 1px;
+  background-color: #ff8df0
+}
 input {
   height: 2em;
 }
@@ -168,11 +180,12 @@ textarea {
   height: 5em;
 }
 button {
-  width: 86%;
+  width: 68%;
   max-width: 30em;
   height: 3em;
   margin-top: 5px;
   border-radius: 0.5em;
+  border: none;
   background-color: #72ece6;
   font-weight: bold;
 }
