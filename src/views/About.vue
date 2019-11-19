@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <div>
-      <h1>This application was built by Matsui Hidetoshi.</h1>
+      <h1>This application was built by<br/>Matsui Hidetoshi.</h1>
       <h2>Versions</h2>
       <h3>Frontend</h3>
       <p>node 12.10.0</p>
@@ -14,6 +14,7 @@
       <p>AWS DynamoDB</p>
       <p>AWS Lambda</p>
       <p>Amazon Comprehend</p>
+      <p>python 3.7</p>
       <h3>Versioning</h3>
       <p>Github</p>
       <h3>Architecture</h3>
