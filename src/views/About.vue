@@ -7,7 +7,7 @@
       <p>node 12.10.0</p>
       <p>npm 6.11.3</p>
       <p>vue-cli 3.10.0</p>
-      <p>amppfy-cli 3.0.0</p>
+      <p>amplify-cli 3.0.0</p>
       <h3>Backend</h3>
       <p>AWS CloudFormation</p>
       <p>AWS AppSync</p>
