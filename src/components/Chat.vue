@@ -1,5 +1,8 @@
 <template>
   <div class="chats">
+    <div>
+      <p>{{ keyPhrase }}</p>
+    </div>
     <div id="chat-field">
       <div v-for="(chat, id) in chats" v-bind:key="id">
         <div v-if="chat.sentiment === 'POSITIVE'">
@@ -56,9 +59,15 @@ export default {
       chats: [],
       name: "",
       description: "",
+      botDescription: "",
       adjectives: [],
       nouns: [],
-      sentiment: ""
+      sentiment: "",
+      keyPhrase: "",
+      keyPhrases: null,
+      negativeBotFirstText: ["どうした？", "大丈夫？", "えぇ？"],
+      negativeBotSecondText: ["のことは忘れろ！", "はショックだね…", "か、マジで？"],
+      positiveBotFirstText: ["よかったね！", "いいね！", "素敵だね！"]
     }
   },
   mounted: function () {
@@ -73,7 +82,20 @@ export default {
         }
       }).then(response => {
         this.sentiment = response.data.body.Sentiment
+        this.randomWordFromDetectedKeyPhrases()
         this.createChat()
+      })
+    },
+    randomWordFromDetectedKeyPhrases: function() {
+      axios.get('https://lxcbs1mty6.execute-api.ap-northeast-1.amazonaws.com/default/DetectKeyPhrases', {
+        params: {
+          text: this.description.replace(/\r?\n/g, '')
+        }
+      }).then(response => {
+        this.keyPhrases = response.data.body.KeyPhrases
+        let random = Math.floor(Math.random() * this.keyPhrases.length)
+        this.keyPhrase = this.keyPhrases[random]["Text"]
+        this.createBotChat()
       })
     },
     createChat: async function () {
@@ -87,6 +109,28 @@ export default {
         await API.graphql(graphqlOperation(createChat, {input: chat}))
       } catch (error) {
         error
+      }
+    },
+    createBotChat: async function () {
+      if ((this.sentiment == "NEGATIVE") || (this.sentiment == "POSITIVE")) {
+        if (this.sentiment == "NEGATIVE") {
+          let firstRandom = Math.floor(Math.random() * this.negativeBotFirstText.length)
+          let secondRandom = Math.floor(Math.random() * this.negativeBotSecondText.length)
+          this.botDescription = this.negativeBotFirstText[firstRandom] + this.name + "！\n" + this.keyPhrase + this.negativeBotSecondText[secondRandom]
+        } else if (this.sentiment == "POSITIVE") {
+          let random = Math.floor(Math.random() * this.positiveBotFirstText.length)
+          this.botDescription = this.positiveBotFirstText[random] + this.name + "！"
+        }
+        let title = this.adjectives[Math.floor(Math.random() * this.adjectives.length)].name + this.nouns[Math.floor(Math.random() * this.nouns.length)].name
+        const chat = {name: "雑bot", description: this.botDescription, title: title, sentiment: this.sentiment}
+        try {
+          const chats = [...this.chats, chat]
+          this.chats = chats
+          this.description = ""
+          await API.graphql(graphqlOperation(createChat, {input: chat}))
+        } catch (error) {
+          error
+        }
       }
     },
     reloadChats: function () {
