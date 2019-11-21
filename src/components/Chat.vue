@@ -1,8 +1,5 @@
 <template>
   <div class="chats">
-    <div>
-      <p>{{ keyPhrase }}</p>
-    </div>
     <div id="chat-field">
       <div v-for="(chat, id) in chats" v-bind:key="id">
         <div v-if="chat.sentiment === 'POSITIVE'">
