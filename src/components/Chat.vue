@@ -4,28 +4,24 @@
       <div v-for="(chat, id) in chats" v-bind:key="id">
         <div v-if="chat.sentiment === 'POSITIVE'">
           <div class="positive">
-            <strong class="title">{{ chat.title }}</strong><br/>
             <strong>{{ chat.name }}</strong><br/>
             {{ chat.description }}
           </div>
         </div>
         <div v-else-if="chat.sentiment === 'NEGATIVE'">
           <div class="negative">
-            <strong class="title">{{ chat.title }}</strong><br/>
             <strong>{{ chat.name }}</strong><br/>
             {{ chat.description }}
           </div>
         </div>
         <div v-else-if="chat.sentiment === 'MIXED'">
           <div class="mixed">
-            <strong class="title">{{ chat.title }}</strong><br/>
             <strong>{{ chat.name }}</strong><br/>
             {{ chat.description }}
           </div>
         </div>
         <div v-else>
           <div class="neutral">
-            <strong class="title">{{ chat.title }}</strong><br/>
             <strong>{{ chat.name }}</strong><br/>
             {{ chat.description }}
           </div>
