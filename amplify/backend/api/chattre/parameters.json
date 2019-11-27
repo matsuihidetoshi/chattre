@@ -2,5 +2,11 @@
     "AppSyncApiName": "chattre",
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
     "DynamoDBEnableServerSideEncryption": "false",
-    "APIKeyExpirationEpoch": "-1"
+    "APIKeyExpirationEpoch": "-1",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authchattre586d4f99",
+            "Outputs.UserPoolId"
+        ]
+    }
 }

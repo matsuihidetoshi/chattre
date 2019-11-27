@@ -9,6 +9,11 @@
             "UnauthRoleName": "chattre-default-20191102223252-unauthRole",
             "StackName": "chattre-default-20191102223252",
             "StackId": "arn:aws:cloudformation:ap-northeast-1:846058660752:stack/chattre-default-20191102223252/45925650-fd75-11e9-8b6e-06680f8688ee"
+        },
+        "categories": {
+            "auth": {
+                "chattre586d4f99": {}
+            }
         }
     }
 }
