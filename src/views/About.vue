@@ -13,6 +13,7 @@
       <p>AWS AppSync</p>
       <p>AWS DynamoDB</p>
       <p>AWS Lambda</p>
+      <p>AWS Cognito</p>
       <p>Amazon Comprehend</p>
       <p>python 3.7</p>
       <h3>Versioning</h3>
